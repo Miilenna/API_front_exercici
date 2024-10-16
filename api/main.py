@@ -1,8 +1,8 @@
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException, Query
 
 from pydantic import BaseModel
 
-from typing import List
+from typing import List, Optional
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -47,14 +47,28 @@ class aula(BaseModel):
 def read_root():
     return {"Alumnes API"}
 
-#Endpoint para mostrar todos los alumnos
-@app.get("/alumne/list", response_model=List[tablaAlumne])
-def read_alumne():
+#Endpoint para mostrar todos los alumnos    
+@app.get("/alumne/list", response_model=List[tablaAlumne]) 
+def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, skip: int = Query(0, ge=0), limit: Optional[int] = Query (100, gt=0)):
     alumnes_list = alumnes.alumnes_schema(db_alumnes.read_alumne())
-    print("Alumnes List:", alumnes_list)  # Imprime la lista de alumnos en la terminal
-    return alumnes_list
-    #Lee todos los alumnos de la base de datos y los devuelve
-    #return alumnes.alumnes_schema(db_alumnes.read_alumne())
+    
+    
+    if not alumnes_list: 
+        return []
+    
+    if contain:
+        alumnes_list = [alumne for alumne in alumnes_list if contain.lower() in alumne["NomAlumne"].lower()]
+    
+    if orderby == "asc":
+        alumnes_ordenats = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"])
+    elif orderby == "desc":
+        alumnes_ordenats = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"], reverse=True)
+    else:
+        alumnes_ordenats = alumnes_list
+    
+    alumnes_list = alumnes_list[skip: skip + (limit if limit is not None else len(alumnes_list))]
+    
+    return alumnes_ordenats
 
 #Endpoint para mostrar un alumno en función de su id
 @app.get("/alumne/show/{idAlumne}", response_model=dict)
