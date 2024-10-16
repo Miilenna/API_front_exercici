@@ -1,16 +1,40 @@
 from client import db_client
 
 #Función que muestra toda la información de la tabla "alumne"
-def read_alumne():
+def read_alumne(orderby : str = None, contain: str = None, skip: int = 0, limit: int | None = None ):
     try:
         #Conexión a la base de datos
         conn = db_client()
         cur = conn.cursor()
         #Consulta SQL para seleccionar todos los registros de la tabla "alumne"
-        cur.execute("""select alumne.NomAlumne, alumne.Cicle, alumne.Curs, alumne.Grup, aula.DescAula
+        sql_query = """select alumne.NomAlumne, alumne.Cicle, alumne.Curs, alumne.Grup, aula.DescAula
                     from alumne
                     join aula on alumne.idAula = aula.idAula
-                    """)
+                    """
+        if (orderby == "asc"):
+            sql_query += " ORDER BY alumne.NomAlumne ASC"
+        elif (orderby == "desc"):
+            sql_query += " ORDER BY alumne.NomAlumne DESC"
+            
+        if(contain):
+            sql_query += " WHERE alumne.NomAlumne ILIKE %s"
+        
+        if(limit is not None):
+            sql_query += " LIMIT %s"
+            
+        if(skip > 0):
+            sql_query += " OFFSET %s"
+        
+        parametres = []
+        if contain:
+            parametres.append(f"%{contain}%")
+        if limit is not None:
+            parametres.append(limit)
+        if skip > 0:
+            parametres.append(skip)
+            
+
+        cur.execute(sql_query, parametres)
 
         #Almacena el resultado de la consulta
         select_alumne = cur.fetchall()
