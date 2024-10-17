@@ -1,5 +1,6 @@
-from fastapi import FastAPI,HTTPException, Query
-
+from fastapi import FastAPI,HTTPException, Query, File, UploadFile
+import csv
+import io
 from pydantic import BaseModel
 
 from typing import List, Optional
@@ -120,7 +121,44 @@ async def create_alumne(data: alumne):
     return {
         "msg": "S'ha afegit correctement"
     }
+
+@app.post("/alumne/loadAlumnes")
+async def load_alumnes(file: UploadFile = File(...)):
     
+    #Si el fichero es .csv
+    if file.filename.endswith('.csv'):
+        # Lee el fichero .csv
+        contents = await file.read()
+        
+        # de CSV a JSON
+        csv_data = io.StringIO(contents.decode('utf-8'))
+        csv_reader = csv.DictReader(csv_data)
+        json_data = [row for row in csv_reader]
+        
+        for i in csv_reader:
+            DescAula = i.get("DescAula")
+            Edifici = i.get("Edifici")
+            Pis = i.get("Pis")
+            NomAlumne = i.get("NomAlumne")
+            Cicle = i.get("Cicle")
+            Curs = i.get("Curs")
+            Grup = i.get("Grup")
+
+            idAula = db_alumnes.insertar_aula(DescAula, Edifici, Pis)
+            
+            db_alumnes.insertar_alumne(NomAlumne, Cicle, Curs, Grup, idAula)
+        
+        return {
+            "resultat": json_data,
+            "msg":"Càrrega massiva realitzada correctament"
+        }
+    
+    else:
+        return {"error": "Només fichers CSV."}
+
+
+
+
 # ------------------------------- PETICIÓN PUT -------------------------------    
     
 #Endpoint para actualizar los campos del alumno según la id

@@ -182,3 +182,56 @@ def delete_alumne(id):
         conn.close()
         
     return deleted_alumne
+
+def insertar_aula(DescAula: str, Edifici: str, Pis: str):
+    try:
+        conn = db_client()
+        cur = conn.cursor()
+        
+        query = "SELECT * FROM aula WHERE DescAula = %s;"
+        cur.execute(query,DescAula)
+        aula_existeix = cur.fetchone()
+        
+        if aula_existeix:
+            print(f"L'aula amb DescAula {DescAula} ja existeix.")
+        else:
+            query_insert_aula= """
+            INSERT INTO aula (DescAula, Edifici, Pis, CreatedAt, UpdatedAt)
+            VALUES (%s,%s,%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+            """
+        cur.execute(query_insert_aula, (DescAula, Edifici, Pis))
+        conn.commit()
+        print(f"Aula {DescAula} afegida correctament")
+    except Exception as e:
+        print(f"Error al afegir aula {e}")
+    
+    finally:
+        conn.close()
+
+def insertar_alumne(NomAlumne: str, Cicle: str, Curs: int, Grup: str, idAula: int):
+    try:
+        conn = db_client()
+        cur = conn.cursor()
+        
+        query = """
+            SELECT * FROM alumne
+            WHERE NomAlumne = %s and Cicle = %s and Curs = %s and Grup = %s;
+        """
+        cur.execute(query, (NomAlumne, Cicle, Curs, Grup))
+        alumne_existeix = cur.fetchone()
+        
+        if alumne_existeix:
+            print(f"L'alumne {NomAlumne} ja existeix en el Cicle {Cicle}, Curs {Curs}, Grup {Grup}.")
+        else:
+            query_insert_alumne = """
+                INSERT INTO alumne (NomAlumne, Cicle, Curs, Grup, idAula, CreatedAt, UpdatedAt)
+                VALUES (%s,%s,%s,%s,%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+            """
+            cur.execute(query_insert_alumne, (NomAlumne, Cicle, Curs, Grup, idAula))
+            conn.commit()
+            print(f"Alumne {NomAlumne} inserit correctament.")
+    except Exception as e:
+        print(f"Error en afegir alumne {e}")
+    
+    finally:
+        conn.close()
