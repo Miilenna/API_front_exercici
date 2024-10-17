@@ -30,7 +30,7 @@ def read_alumne(orderby : str = None, contain: str = None, skip: int = 0, limit:
             parametres.append(f"%{contain}%")
         if limit is not None:
             parametres.append(limit)
-        if skip > 0:
+        if skip > 0 and skip <= 100:
             parametres.append(skip)
             
 

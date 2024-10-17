@@ -52,7 +52,6 @@ def read_root():
 def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, skip: int = Query(0, ge=0), limit: Optional[int] = Query (100, gt=0)):
     alumnes_list = alumnes.alumnes_schema(db_alumnes.read_alumne())
     
-    
     if not alumnes_list: 
         return []
     
@@ -60,15 +59,13 @@ def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, sk
         alumnes_list = [alumne for alumne in alumnes_list if contain.lower() in alumne["NomAlumne"].lower()]
     
     if orderby == "asc":
-        alumnes_ordenats = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"])
+        alumnes_list = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"])
     elif orderby == "desc":
-        alumnes_ordenats = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"], reverse=True)
-    else:
-        alumnes_ordenats = alumnes_list
+        alumnes_list = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"], reverse=True)
     
-    alumnes_list = alumnes_list[skip: skip + (limit if limit is not None else len(alumnes_list))]
+    alumnes_list = alumnes_list[skip: skip + limit]
     
-    return alumnes_ordenats
+    return alumnes_list
 
 #Endpoint para mostrar un alumno en función de su id
 @app.get("/alumne/show/{idAlumne}", response_model=dict)
