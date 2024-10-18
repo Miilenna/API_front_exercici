@@ -135,13 +135,13 @@ async def load_alumnes(file: UploadFile = File(...)):
         csv_reader = csv.DictReader(csv_data)
         json_data = [row for row in csv_reader]
         
-        for i in csv_reader:
+        for i in json_data:
             DescAula = i.get("DescAula")
             Edifici = i.get("Edifici")
             Pis = i.get("Pis")
             NomAlumne = i.get("NomAlumne")
             Cicle = i.get("Cicle")
-            Curs = i.get("Curs")
+            Curs = int(i.get("Curs"))
             Grup = i.get("Grup")
 
             idAula = db_alumnes.insertar_aula(DescAula, Edifici, Pis)

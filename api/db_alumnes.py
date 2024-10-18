@@ -188,20 +188,23 @@ def insertar_aula(DescAula: str, Edifici: str, Pis: str):
         conn = db_client()
         cur = conn.cursor()
         
-        query = "SELECT * FROM aula WHERE DescAula = %s;"
-        cur.execute(query,DescAula)
+        query = "SELECT idAula FROM aula WHERE DescAula = %s;"
+        cur.execute(query,(DescAula,))
         aula_existeix = cur.fetchone()
         
         if aula_existeix:
             print(f"L'aula amb DescAula {DescAula} ja existeix.")
+            return aula_existeix[0]
         else:
             query_insert_aula= """
             INSERT INTO aula (DescAula, Edifici, Pis, CreatedAt, UpdatedAt)
-            VALUES (%s,%s,%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+            VALUES (%s,%s,%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING idAula;
             """
-        cur.execute(query_insert_aula, (DescAula, Edifici, Pis))
-        conn.commit()
-        print(f"Aula {DescAula} afegida correctament")
+            cur.execute(query_insert_aula, (DescAula, Edifici, Pis))
+            idAula = cur.fetchone()[0]
+            conn.commit()
+            print(f"Aula {DescAula} afegida correctament")
+            return idAula
     except Exception as e:
         print(f"Error al afegir aula {e}")
     
