@@ -33,11 +33,27 @@
 
 
 # APARTAT 2
+# En este apartado se pide hacer 4 consultas. En las 4 consultas tenemos que modificar 2 archivos: db_alumnes.py y main.py. La primera consulta pide que se haga un orderby asc o desc, además de que devuelva el nombre del alumno, el ciclo, el curso, el grupo y la descripción del aula en una lista json.
+# Modificaciones en los 2 archivos:
+
+# FICHERO DB_ALUMNES.PY:
+# Tenemos que añadir 2 condiciones que sea asc o desc y poner que lo ordene dependiendo como se lo hemos indicado. 
+
+# FICHERO MAIN.PY:
+# En este archivo tenemos que añadir una función que como parámetros le pasemos: orderby: Optional[str] = None, esto significa que el orderby puede ser string o none. Además el = None significa que por defecto no hay nada.
 
 # orderby
 # ![alt text](img/orderby.png)
 # ![alt text](img/docs_orderby.png)
 
+# La siguiente consulta sirve para saber si el campo del nombre del alumno que está dentro de la base de datos y se visualiza en la lista json contiene ese nombre. Tiene que devolver los mismos campos que en la consulta anterior, es decir, el nombre del alumno, el ciclo, el curso, el grupo y la descripción del aula.
+# Para ello tenemos que modificar los mismos 2 archivo:
+
+# FICHERO DB_ALUMNES.PY:
+# En este fichero añadimos otra condición que sea para ver si contiene esa palabra el nombre del alumno. 
+
+# FICHERO MAIN.PY:
+# En este fichero tenemos que añadir una condición que almacena los alumnos que cumplen el criterio en una variable. Después la subcadena contain la convertimos a minúsculas. Luego, cada alumno recorre alumnes_list con un bucle for y lo pasamos a minúsculas. Si la subcadena contain_lower está en el nombre del alumno, se añade el alumno a la lista creada anteriormente. Cuando sale del bucle, la alumnes_list se reemplaza por la lista nueva.
 
 # contain
 # ![alt text](img/contain_no.png)
