@@ -57,7 +57,13 @@ def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, sk
         return []
     
     if contain:
-        alumnes_list = [alumne for alumne in alumnes_list if contain.lower() in alumne["NomAlumne"].lower()]
+        alumnes_filtrats = []
+        contain_lower = contain.lower()
+        for alumne in alumnes_list:
+            nom_alumne_lower = alumne["NomAlumne"].lower()
+            if contain_lower in nom_alumne_lower:
+                alumnes_filtrats.append(alumne)
+        alumnes_list = alumnes_filtrats
     
     if orderby == "asc":
         alumnes_list = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"])
