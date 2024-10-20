@@ -34,7 +34,9 @@ En este archivo tenemos que añadir una función que como parámetros le pasemos
 ### Orderby
 <img src="img/orderby.png" width="500" height="500">
 
-<img src="img/docs_orderby.png" width="500" height="500">
+<img src="img/orderby_docs_asc.png" width="500" height="500">
+<img src="img/orderby_docs_result.png" width="500" height="500">
+
 
 
 ## SEGUNDA CONSULTA
@@ -49,7 +51,7 @@ En el main lo que tenemos que añadir como parámetro en la función es: contain
 Basicamente que puede contener un string o None. Luego tenemos que añadir una condición que almacena los alumnos que cumplen el criterio en una variable. Después la subcadena contain la convertimos a minúsculas. Luego, cada alumno recorre alumnes_list con un bucle for y lo pasamos a minúsculas. Si la subcadena contain_lower está en el nombre del alumno, se añade el alumno a la lista creada anteriormente. Cuando sale del bucle, la alumnes_list se reemplaza por la lista nueva.
 
 ### Contain
-<img src="img/contain_no.png" width="500" height="500">
+<img src="img/contain_no.png" width="500" height="300">
 
 <img src="img/contain_yes.png" width="500" height="500">
 
@@ -77,7 +79,7 @@ En el caso del limit es parecido, el Query(100) signfica que si no le pasamos ni
 
 ### Todo junto:
 A continuación probé de hacer todas las consultas juntas (orderby = asc, contain= m, skip = 0 y limit = 5):
-<img src="img/docs_tot.png" width="500" height="500">
+<img src="img/docs_tot.png" width="700" height="400">
 
 <img src="img/tot.png" width="500" height="500">
 
@@ -92,11 +94,13 @@ En este fichero tenemos que crear 2 nuevas funciones, la primera que crearemos s
 En este fichero se tiene crear una nueva petición que sea para que muestre el archivo csv que se le ha pasado. Dentro de esta petición creamos una función para pasar archivos. Dentro de la función añadimos una condición para saber si es un archivo csv, si no lo es saldrá un mensaje que solo acepta archivos csv. Si el archivo tiene la extensión que se pide leerá el archivo y se pasará a json. Se crea un bucle for que lee cada fila del archivo transformado en json y extrae los 5 campos que se pide. Además hay que llamar a las 2 funciones creadas en db_alumnes.py para que funcione bien la petición del main. Por último hacemos un return de los resultados. Así es como nos crea los alumnos y aulas si no existen y nos lo muestra.
 
 ## CSV
-<img src="img/arxiu_csv.png" width="500" height="500">
+<img src="img/load_alumnes.png" width="500" height="500">
+<img src="img/load_alumnes_result.png" width="500" height="500">
+
 
 <img src="img/csv_no.png" width="500" height="500">
 
 Al hacer un insert así es como quedan las tablas:
-<img src="img/taula_alumn.png" width="500" height="500">
+<img src="img/taula_alumn.png" width="700" height="300">
 
-<img src="img/taula_aula.png" width="500" height="500">
+<img src="img/taula_aula.png" width="700" height="300">
