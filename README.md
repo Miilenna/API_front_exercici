@@ -34,8 +34,8 @@ En este archivo tenemos que añadir una función que como parámetros le pasemos
 ### Orderby
 <img src="img/orderby.png" width="500" height="500">
 
-<img src="img/orderby_docs_asc.png" width="500" height="500">
-<img src="img/orderby_docs_result.png" width="500" height="500">
+<img src="img/orderby_docs_asc.png" width="700" height="300">
+<img src="img/orderby_docs_result.png" width="900" height="400">
 
 
 
@@ -94,8 +94,8 @@ En este fichero tenemos que crear 2 nuevas funciones, la primera que crearemos s
 En este fichero se tiene crear una nueva petición que sea para que muestre el archivo csv que se le ha pasado. Dentro de esta petición creamos una función para pasar archivos. Dentro de la función añadimos una condición para saber si es un archivo csv, si no lo es saldrá un mensaje que solo acepta archivos csv. Si el archivo tiene la extensión que se pide leerá el archivo y se pasará a json. Se crea un bucle for que lee cada fila del archivo transformado en json y extrae los 5 campos que se pide. Además hay que llamar a las 2 funciones creadas en db_alumnes.py para que funcione bien la petición del main. Por último hacemos un return de los resultados. Así es como nos crea los alumnos y aulas si no existen y nos lo muestra.
 
 ## CSV
-<img src="img/load_alumnes.png" width="500" height="500">
-<img src="img/load_alumnes_result.png" width="500" height="500">
+<img src="img/load_alumnes.png" width="700" height="300">
+<img src="img/load_alumnes_result.png" width="900" height="400">
 
 
 <img src="img/csv_no.png" width="500" height="500">
