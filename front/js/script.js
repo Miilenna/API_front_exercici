@@ -22,22 +22,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Repetir per tots els altres camps restants que retorna l'endpoint
                 
-                //Cicle
+                //Ciclo
                 const CicleCell = document.createElement("td");
                 CicleCell.textContent = alumne.Cicle;
                 row.appendChild(CicleCell);
 
-                //Curs
+                //Curso
                 const CursCell = document.createElement("td");
                 CursCell.textContent = alumne.Curs;
                 row.appendChild(CursCell);
 
-                //Grup
+                //Grupo
                 const GrupCell = document.createElement("td");
                 GrupCell.textContent = alumne.Grup;
                 row.appendChild(GrupCell);
 
-                //Nom de l'aula
+                //Nombre del aula
                 const DescAulaCell = document.createElement("td");
                 DescAulaCell.textContent = alumne.DescAula;
                 row.appendChild(DescAulaCell);
