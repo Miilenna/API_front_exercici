@@ -28,6 +28,7 @@ class alumne(BaseModel):
     Curs: int
     Grup: str
 
+#Modelo pydantic para la tabla de alumno y aula
 class tablaAlumne(BaseModel):
     NomAlumne: str
     Cicle: str
@@ -51,11 +52,14 @@ def read_root():
 #Endpoint para mostrar todos los alumnos    
 @app.get("/alumne/list", response_model=List[tablaAlumne]) 
 def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, skip: int = Query(0, ge=0), limit: Optional[int] = Query (100, gt=0)):
+    #Obtiene la lista de alumnos desde la base de datos
     alumnes_list = alumnes.alumnes_schema(db_alumnes.read_alumne())
     
+    #Si no hay alumnos devuelve una lista vacía
     if not alumnes_list: 
         return []
     
+    #Filtra alumnos cuyo nombre contenga el valor de contain
     if contain:
         alumnes_filtrats = []
         contain_lower = contain.lower()
@@ -65,11 +69,13 @@ def read_alumne(orderby: Optional[str] = None, contain: Optional[str] = None, sk
                 alumnes_filtrats.append(alumne)
         alumnes_list = alumnes_filtrats
     
+    #Ordena la lista de alumnos de manera ascendente o descendente según el valor de orderby
     if orderby == "asc":
         alumnes_list = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"])
     elif orderby == "desc":
         alumnes_list = sorted(alumnes_list,key=lambda alumne : alumne["NomAlumne"], reverse=True)
     
+    #Devuelve los alumnos, limitando el resultado según skip y limit
     alumnes_list = alumnes_list[skip: skip + limit]
     
     return alumnes_list
@@ -131,16 +137,15 @@ async def create_alumne(data: alumne):
 @app.post("/alumne/loadAlumnes")
 async def load_alumnes(file: UploadFile = File(...)):
     
-    #Si el fichero es .csv
+    #Verifica que el archivo sea csv
     if file.filename.endswith('.csv'):
-        # Lee el fichero .csv
+        # Lee el archivo csv
         contents = await file.read()
-        
-        # de CSV a JSON
         csv_data = io.StringIO(contents.decode('utf-8'))
         csv_reader = csv.DictReader(csv_data)
         json_data = [row for row in csv_reader]
         
+        #Inserta cada alumno y aula en la base de datos
         for i in json_data:
             DescAula = i.get("DescAula")
             Edifici = i.get("Edifici")
@@ -151,19 +156,17 @@ async def load_alumnes(file: UploadFile = File(...)):
             Grup = i.get("Grup")
 
             idAula = db_alumnes.insertar_aula(DescAula, Edifici, Pis)
-            
             db_alumnes.insertar_alumne(NomAlumne, Cicle, Curs, Grup, idAula)
         
+        #Devuelve los datos cargados y un mensaje de éxito
         return {
             "resultat": json_data,
             "msg":"Càrrega massiva realitzada correctament"
         }
     
     else:
+        #Si el archivo no es un csv, devuelve un mensaje de error.
         return {"error": "Només fichers CSV."}
-
-
-
 
 # ------------------------------- PETICIÓN PUT -------------------------------    
     
